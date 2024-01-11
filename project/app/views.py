@@ -102,7 +102,7 @@ def fetch_user(request):
 def create_category(request):
     categoryData = json.loads(request.body)
     try:
-        requiredFields = ['username', 'name', 'description']
+        requiredFields = ['name', 'description']
         categoryData = json.loads(request.body)
         for field in requiredFields:
             if field not in categoryData:
@@ -136,7 +136,7 @@ def fetch_category(request):
 def create_product(request):
     productData = json.loads(request.body)
     try:
-        requiredFields = ['name', 'description', 'category_id', 'created_by', 'image']
+        requiredFields = ['name', 'description', 'category_id', 'image']
         productData = json.loads(request.body)
         for field in requiredFields:
             if field not in productData:
@@ -154,7 +154,7 @@ def create_product(request):
         newproduct.name = productData['name']
         newproduct.category_id = data['id']
         newproduct.description = productData['description']
-        newproduct.created_by = productData['created_by']
+        newproduct.created_by = request.user
         newproduct.image = productData['image']
         newproduct.save()
         return HttpResponse("Product created successfully!")
@@ -185,7 +185,7 @@ def fetch_product(request):
 def delete_category(request):
     categoryData = json.loads(request.body)
     try:
-        requiredFields = ['username', 'id']
+        requiredFields = ['id']
         categoryData = json.loads(request.body)
         for field in requiredFields:
             if field not in categoryData:
@@ -209,19 +209,18 @@ def delete_category(request):
 def update_product(request):
     productData = json.loads(request.body)
     try:
-        requiredFields = ['created_by', 'id', 'name', 'description', 'category_id']
+        requiredFields = ['id', 'name', 'description', 'category_id']
         productData = json.loads(request.body)
         for field in requiredFields:
             if field not in productData:
                 raise CustomValidationError(f"Missing required field: {field}")
         productToUpdate = Products.objects.get(id=productData['id'])
         productDict = productToUpdate.__dict__
-        if productDict['created_by'] != productData['created_by']:
+        if productDict['created_by'] != request.user:
             return HttpResponse("Not created by this user")
         productToUpdate.name = productData['name']
         productToUpdate.category_id = productData['category_id']
         productToUpdate.description = productData['description']
-        productToUpdate.created_by = productData['created_by']
         productToUpdate.save()
         return HttpResponse("Product updated successfully")
     except CustomValidationError as e:
