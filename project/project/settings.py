@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from commonUtils.middleware import Middleware
+from commonUtils.middleware import Middleware, RequestValidation
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'commonUtils.middleware.JWTAuthenticationMiddleware',
     'commonUtils.middleware.Middleware',
+    'commonUtils.middleware.RequestValidation'
 ]
 
 ROOT_URLCONF = 'project.urls'

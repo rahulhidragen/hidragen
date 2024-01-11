@@ -13,11 +13,11 @@ def hello_world(request):
 @csrf_exempt
 def create_user(request):
     try:
-        requiredFields = ['username', 'password', 'name', 'email']
-        userData = json.loads(request.body)
-        for field in requiredFields:
-            if field not in userData:
-                raise CustomValidationError(f"Missing required field: {field}")
+        # requiredFields = ['username', 'password', 'name', 'email']
+        # userData = json.loads(request.body)
+        # for field in requiredFields:
+        #     if field not in userData:
+        #         raise CustomValidationError(f"Missing required field: {field}")
         userData = json.loads(request.body)
         userObj = User.objects.filter(username=userData['username'])
         if userObj:
@@ -47,12 +47,11 @@ def create_user(request):
 @csrf_exempt
 def login(request):
     try:
-        required_fields = ['username', 'password']
-        request.required_fields = required_fields
+        # required_fields = ['username', 'password']
+        # for field in required_fields:
+            # if field not in userData:
+                # raise CustomValidationError(f"Missing required field: {field}")
         userData = json.loads(request.body)
-        for field in required_fields:
-            if field not in userData:
-                raise CustomValidationError(f"Missing required field: {field}")
         loginData = Login.objects.filter(username=userData['username'])
         if not loginData:
             raise CustomUserCheckError()
@@ -102,11 +101,11 @@ def fetch_user(request):
 def create_category(request):
     categoryData = json.loads(request.body)
     try:
-        requiredFields = ['name', 'description']
-        categoryData = json.loads(request.body)
-        for field in requiredFields:
-            if field not in categoryData:
-                raise CustomValidationError(f"Missing required field: {field}")
+        # requiredFields = ['name', 'description']
+        # categoryData = json.loads(request.body)
+        # for field in requiredFields:
+        #     if field not in categoryData:
+        #         raise CustomValidationError(f"Missing required field: {field}")
         newcategory = Category()
         newcategory.name = categoryData['name']
         newcategory.description = categoryData['description']
@@ -136,11 +135,11 @@ def fetch_category(request):
 def create_product(request):
     productData = json.loads(request.body)
     try:
-        requiredFields = ['name', 'description', 'category_id', 'image']
-        productData = json.loads(request.body)
-        for field in requiredFields:
-            if field not in productData:
-                raise CustomValidationError(f"Missing required field: {field}")
+        # requiredFields = ['name', 'description', 'category_id', 'image']
+        # productData = json.loads(request.body)
+        # for field in requiredFields:
+        #     if field not in productData:
+        #         raise CustomValidationError(f"Missing required field: {field}")
         category = Category.objects.filter(id=productData['category_id'])
         if not category:
             return HttpResponse("Category id invalid!")
@@ -185,11 +184,11 @@ def fetch_product(request):
 def delete_category(request):
     categoryData = json.loads(request.body)
     try:
-        requiredFields = ['id']
-        categoryData = json.loads(request.body)
-        for field in requiredFields:
-            if field not in categoryData:
-                raise CustomValidationError(f"Missing required field: {field}")
+        # requiredFields = ['id']
+        # categoryData = json.loads(request.body)
+        # for field in requiredFields:
+        #     if field not in categoryData:
+        #         raise CustomValidationError(f"Missing required field: {field}")
         products = Products.objects.filter(category_id=categoryData["id"])
         if products:
             raise CustomProductExistError()
@@ -209,11 +208,11 @@ def delete_category(request):
 def update_product(request):
     productData = json.loads(request.body)
     try:
-        requiredFields = ['id', 'name', 'description', 'category_id']
-        productData = json.loads(request.body)
-        for field in requiredFields:
-            if field not in productData:
-                raise CustomValidationError(f"Missing required field: {field}")
+        # requiredFields = ['id', 'name', 'description', 'category_id']
+        # productData = json.loads(request.body)
+        # for field in requiredFields:
+        #     if field not in productData:
+        #         raise CustomValidationError(f"Missing required field: {field}")
         productToUpdate = Products.objects.get(id=productData['id'])
         productDict = productToUpdate.__dict__
         if productDict['created_by'] != request.user:

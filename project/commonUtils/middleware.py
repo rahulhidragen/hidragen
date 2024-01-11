@@ -1,3 +1,4 @@
+import json
 from django.http import JsonResponse
 import jwt
 
@@ -82,6 +83,7 @@ class CustomAuthenticationError(Exception):
         }
 
 
+
 # Middleware class for the check of JWT status
 class Middleware:
     def __init__(self, get_response):
@@ -124,6 +126,41 @@ class Middleware:
                 }
                 return JsonResponse(resp, status=400)
 
+        except Exception as e:
+            print("An error occurred:", str(e))
+
+        return self.get_response(request)
+    
+
+
+
+class RequestValidation:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        try:
+            if request.path_info == "/create/category/":
+                required_fields = ['name', 'description']
+            elif request.path_info == "/create/user/":
+                required_fields = ['username', 'password', 'name', 'email']
+            elif request.path_info == "/login/":
+                required_fields = ['username', 'password']
+            elif request.path_info == "/create/product/":
+                required_fields = ['name', 'description', 'category_id', 'image']
+            elif request.path_info == "/delete/category/":
+                required_fields = ['id']
+            elif request.path_info == "/update/product/":
+                required_fields = ['id', 'name', 'description', 'category_id']
+
+            inputData = json.loads(request.body)
+            for field in required_fields:
+                if field not in inputData:
+                    resp = {
+                    "resp_type": "failure",
+                    "message": "Missing field "+field
+                    }
+                    return JsonResponse(resp, status=400)
         except Exception as e:
             print("An error occurred:", str(e))
 
