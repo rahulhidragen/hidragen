@@ -102,7 +102,6 @@ class Middleware:
                     "message": "Token not provided"
                 }
                 return JsonResponse(resp, status=401)
-
             secret_key = "00000"
             try:
                 decoded_payload = jwt.decode(token, secret_key, algorithms=['HS256'])
@@ -125,10 +124,8 @@ class Middleware:
                     "message": str(e)
                 }
                 return JsonResponse(resp, status=400)
-
         except Exception as e:
             print("An error occurred:", str(e))
-
         return self.get_response(request)
     
 
@@ -152,7 +149,6 @@ class RequestValidation:
                 required_fields = ['id']
             elif request.path_info == "/update/product/":
                 required_fields = ['id', 'name', 'description', 'category_id']
-
             inputData = json.loads(request.body)
             for field in required_fields:
                 if field not in inputData:
@@ -163,5 +159,4 @@ class RequestValidation:
                     return JsonResponse(resp, status=400)
         except Exception as e:
             print("An error occurred:", str(e))
-
         return self.get_response(request)
