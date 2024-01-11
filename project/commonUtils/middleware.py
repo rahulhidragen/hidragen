@@ -105,13 +105,6 @@ class Middleware:
             try:
                 decoded_payload = jwt.decode(token, secret_key, algorithms=['HS256'])
                 request.user = decoded_payload['username']
-
-                # Custom validation for required fields in the request body
-                # required_fields = ['username', 'password']
-                # for field in required_fields:
-                #     if not request.POST.get(field):
-                #         raise CustomValidationError(f"Missing required field: {field}")
-
             except jwt.ExpiredSignatureError:
                 resp = {
                     "resp_type": "failure",
