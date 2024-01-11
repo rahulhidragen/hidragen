@@ -2,7 +2,7 @@ import jwt
 from datetime import datetime, timedelta
 from app.models import Login
 
-
+# Decoding a jwt
 def decodeJwt(username, token):
     secretKey = "00000"
     loginObj = Login.objects.filter(username=username)
@@ -45,7 +45,7 @@ def decodeJwt(username, token):
         }
         return resp
 
-
+# Encoding a jwt
 def encodeJwt(username):
     secretKey = "00000"
     payload = {

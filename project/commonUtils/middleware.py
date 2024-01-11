@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 import jwt
 
-
+# For checking if the product is existing to prevent the deletion of a category
 class CustomProductExistError(Exception):
     def __init__(self, status=402, data={}):
         message = "Category cannot be removed as a product already exist under this category"
@@ -17,7 +17,7 @@ class CustomProductExistError(Exception):
             'message': self.message,
         }
     
-
+# Prevention of user creation if the username already exists
 class CustomUserExistError(Exception):
     def __init__(self, status=500, data={}):
         message = "User already exist, plaese choose a different username"
@@ -33,7 +33,7 @@ class CustomUserExistError(Exception):
             'message': self.message,
         }
     
-
+# Prevention of login if the user does not exist
 class CustomUserCheckError(Exception):
     def __init__(self, status=404, data={}):
         message = "User not found, please create a user to continue"
@@ -49,7 +49,7 @@ class CustomUserCheckError(Exception):
             'message': self.message,
         }
     
-
+# Validation check for the required fields
 class CustomValidationError(Exception):
     def __init__(self, message, status=401, data={}):
         self.message = message
@@ -65,7 +65,7 @@ class CustomValidationError(Exception):
         }
     
 
-
+# Authentication error for username and password check while loggin in
 class CustomAuthenticationError(Exception):
     def __init__(self, status=401, data={}):
         message = "Incorrect password/username"
@@ -82,7 +82,7 @@ class CustomAuthenticationError(Exception):
         }
 
 
-
+# Middleware class for the check of JWT status
 class Middleware:
     def __init__(self, get_response):
         self.get_response = get_response
