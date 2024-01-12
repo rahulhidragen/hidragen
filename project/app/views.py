@@ -2,7 +2,7 @@
 import json
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from commonUtils.middleware import CustomAuthenticationError, CustomProductExistError, CustomUserCheckError, CustomUserExistError, CustomValidationError
+from commonUtils.middleware import CustomAuthenticationError, CustomInvalidCategoryId, CustomInvalidUser, CustomProductExistError, CustomUserCheckError, CustomUserExistError, CustomValidationError
 from .models import Login, User, Category, Products
 from commonUtils.jwt import encodeJwt
 
@@ -122,7 +122,7 @@ def create_product(request):
     try:
         category = Category.objects.filter(id=productData['category_id'])
         if not category:
-            return HttpResponse("Category id invalid!")
+            raise CustomInvalidCategoryId()
         for i in category:
             data = { 
                 "name":i.name,
@@ -138,6 +138,9 @@ def create_product(request):
         newproduct.save()
         return HttpResponse("Product created successfully!")
     except CustomValidationError as error:
+        failure_response = error.failureDict()
+        return JsonResponse(failure_response, status=failure_response['status'])
+    except CustomInvalidCategoryId as error:
         failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
 
@@ -186,12 +189,15 @@ def update_product(request):
         productToUpdate = Products.objects.get(id=productData['id'])
         productDict = productToUpdate.__dict__
         if productDict['created_by'] != request.user:
-            return HttpResponse("Not created by this user")
+            raise CustomInvalidUser()
         productToUpdate.name = productData['name']
         productToUpdate.category_id = productData['category_id']
         productToUpdate.description = productData['description']
         productToUpdate.save()
         return HttpResponse("Product updated successfully")
     except CustomValidationError as error:
+        failure_response = error.failureDict()
+        return JsonResponse(failure_response, status=failure_response['status'])
+    except CustomInvalidUser as error:
         failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])

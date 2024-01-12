@@ -83,6 +83,38 @@ class CustomAuthenticationError(Exception):
         }
 
 
+class CustomInvalidCategoryId(Exception):
+    def __init__(self, status=401, data={}):
+        message = "Category id invalid!"
+        self.message = message
+        self.status = status
+        self.data = data
+        super().__init__(message)
+
+    def failureDict(self):
+        return {
+            'status': self.status,
+            'data': self.data,
+            'message': self.message,
+        }
+    
+
+class CustomInvalidUser(Exception):
+    def __init__(self, status=401, data={}):
+        message = "Product not created by this user"
+        self.message = message
+        self.status = status
+        self.data = data
+        super().__init__(message)
+
+    def failureDict(self):
+        return {
+            'status': self.status,
+            'data': self.data,
+            'message': self.message,
+        }
+
+
 
 # Middleware class for the check of JWT status
 class Middleware:
