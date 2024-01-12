@@ -11,7 +11,7 @@ class CustomProductExistError(Exception):
         self.data = data
         super().__init__(message)
 
-    def to_dict(self):
+    def failureDict(self):
         return {
             'status': self.status,
             'data': self.data,
@@ -27,7 +27,7 @@ class CustomUserExistError(Exception):
         self.data = data
         super().__init__(message)
 
-    def to_dict(self):
+    def failureDict(self):
         return {
             'status': self.status,
             'data': self.data,
@@ -43,7 +43,7 @@ class CustomUserCheckError(Exception):
         self.data = data
         super().__init__(message)
 
-    def to_dict(self):
+    def failureDict(self):
         return {
             'status': self.status,
             'data': self.data,
@@ -58,7 +58,7 @@ class CustomValidationError(Exception):
         self.data = data
         super().__init__(message)
 
-    def to_dict(self):
+    def failureDict(self):
         return {
             'status': self.status,
             'data': self.data,
@@ -75,7 +75,7 @@ class CustomAuthenticationError(Exception):
         self.data = data
         super().__init__(message)
 
-    def to_dict(self):
+    def failureDict(self):
         return {
             'status': self.status,
             'data': self.data,

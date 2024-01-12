@@ -28,11 +28,11 @@ def create_user(request):
         newLogin.save()
         return HttpResponse("User created successfully!")
     
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
-    except CustomUserExistError as e:
-        failure_response = e.to_dict()
+    except CustomUserExistError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
 
 
@@ -57,14 +57,14 @@ def login(request):
             "jwt": token
         }
         return JsonResponse(response, safe=False)
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response)
-    except CustomAuthenticationError as e:
-        failure_response = e.to_dict()
+    except CustomAuthenticationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response)
-    except CustomUserCheckError as e:
-        failure_response = e.to_dict()
+    except CustomUserCheckError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response)
 
 
@@ -96,8 +96,8 @@ def create_category(request):
         newcategory.description = categoryData['description']
         newcategory.save()
         return HttpResponse("Category created successfully!")
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
 
 
@@ -137,8 +137,8 @@ def create_product(request):
         newproduct.image = productData['image']
         newproduct.save()
         return HttpResponse("Product created successfully!")
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
 
 
@@ -170,11 +170,11 @@ def delete_category(request):
         removecategory = Category.objects.filter(id=categoryData['id'])
         removecategory.delete()
         return HttpResponse("Category deleted successfully!")
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
-    except CustomProductExistError as e:
-        failure_response = e.to_dict()
+    except CustomProductExistError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
 
 
@@ -192,6 +192,6 @@ def update_product(request):
         productToUpdate.description = productData['description']
         productToUpdate.save()
         return HttpResponse("Product updated successfully")
-    except CustomValidationError as e:
-        failure_response = e.to_dict()
+    except CustomValidationError as error:
+        failure_response = error.failureDict()
         return JsonResponse(failure_response, status=failure_response['status'])
